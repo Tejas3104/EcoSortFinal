@@ -1,11 +1,14 @@
 import streamlit as st
 import os
 import numpy as np
+import openai  # Import the OpenAI library
 from keras.models import load_model
 from keras.layers import DepthwiseConv2D
 from keras.preprocessing import image
 from keras.applications.mobilenet_v2 import preprocess_input  # Adjust according to your model
 
+# Set your OpenAI API key
+openai.api_key = "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"  # Replace with your actual API key
 
 # Custom DepthwiseConv2D class to handle loading without 'groups' argument
 class CustomDepthwiseConv2D(DepthwiseConv2D):
@@ -48,41 +51,23 @@ def classify_image(model, labels, image_data):
     predicted_label = labels[np.argmax(predictions)]
     return predicted_label
 
-# Function to get recycling suggestions based on the predicted label
-def get_suggestions(predicted_label):
-    suggestions = {
-        "Plastic": [
-            "1. Recycle plastic containers by rinsing and placing them in recycling bins.",
-            "2. Consider using reusable bags instead of plastic ones.",
-            "3. Upcycle plastic bottles into planters or storage containers."
-        ],
-        "Metal": [
-            "1. Clean and recycle metal cans in your local recycling program.",
-            "2. Use metal containers for storage instead of plastic.",
-            "3. Donate old metal items instead of throwing them away."
-        ],
-        "Paper": [
-            "1. Recycle paper products like newspapers and cardboard.",
-            "2. Use both sides of paper before discarding.",
-            "3. Shred sensitive documents and recycle the scraps."
-        ],
-        "Glass": [
-            "1. Rinse glass jars and bottles before recycling them.",
-            "2. Consider using glass containers for food storage.",
-            "3. Repurpose glass jars as vases or decorative items."
-        ],
-        "Compost": [
-            "1. Compost kitchen scraps to create nutrient-rich soil.",
-            "2. Use compost bins or piles to reduce waste.",
-            "3. Educate others about the benefits of composting."
-        ],
-        "Cardboard": [
-            "1. Flatten cardboard boxes before recycling.",
-            "2. Reuse cardboard for crafts or storage.",
-            "3. Consider donating cardboard boxes to local schools or charities."
-        ]
-    }
-    return suggestions.get(predicted_label, ["No specific suggestions available."])
+# Function to get AI-generated suggestions based on the predicted label
+def get_ai_suggestions(waste_type):
+    prompt = f"Provide recycling and disposal suggestions for {waste_type} waste."
+    
+    # Call the OpenAI API to generate suggestions
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # Using GPT-3.5 model
+        prompt=prompt,
+        max_tokens=100,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
+    
+    # Extract the generated suggestions
+    suggestions = response.choices[0].text.strip()
+    return suggestions
 
 # Show classification page
 def show_classification_page():
@@ -121,11 +106,10 @@ def show_classification_page():
                 predicted_label = classify_image(model, labels, image_data)
                 st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
 
-                # Display recycling suggestions
-                suggestions = get_suggestions(predicted_label)
-                st.subheader("Recycling Suggestions:")
-                for suggestion in suggestions:
-                    st.markdown(f'<div class="suggestion">{suggestion}</div>', unsafe_allow_html=True)
+                # Get AI-generated suggestions based on the predicted label
+                ai_suggestions = get_ai_suggestions(predicted_label)
+                st.subheader("AI-Generated Recycling Suggestions:")
+                st.write(ai_suggestions)
             else:
                 st.error("Model or labels not available. Please check if they were loaded correctly.")
 
@@ -144,11 +128,10 @@ def show_classification_page():
                 predicted_label = classify_image(model, labels, image_data)
                 st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
 
-                # Display recycling suggestions
-                suggestions = get_suggestions(predicted_label)
-                st.subheader("Recycling Suggestions:")
-                for suggestion in suggestions:
-                    st.markdown(f'<div class="suggestion">{suggestion}</div>', unsafe_allow_html=True)
+                # Get AI-generated suggestions based on the predicted label
+                ai_suggestions = get_ai_suggestions(predicted_label)
+                st.subheader("AI-Generated Recycling Suggestions:")
+                st.write(ai_suggestions)
             else:
                 st.error("Model or labels not available. Please check if they were loaded correctly.")
 
