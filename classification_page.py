@@ -94,9 +94,9 @@ def get_openai_response(prompt):
             model="gpt-3.5-turbo",  # Specify the model you want to use
             messages=[{"role": "user", "content": prompt}]
         )
-        return response.choices[0].message['content']
+        return response['choices'][0]['message']['content']
     except Exception as e:
-        st.error(f"Error: {e}")
+        print(f"Error: {e}")
         return None
 
 # Show classification page
