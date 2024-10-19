@@ -8,7 +8,7 @@ from keras.applications.mobilenet_v2 import preprocess_input  # Adjust according
 import openai
 
 # Set your OpenAI API key
-openai.api_key = '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' 
+openai.api_key = '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'  # Replace with your actual API key
 
 # Custom DepthwiseConv2D class to handle loading without 'groups' argument
 class CustomDepthwiseConv2D(DepthwiseConv2D):
@@ -51,19 +51,53 @@ def classify_image(model, labels, image_data):
     predicted_label = labels[np.argmax(predictions)]
     return predicted_label
 
-# Function to get recycling suggestions from OpenAI API
-def get_recycling_suggestions(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # Use the appropriate model
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
-
-# Function to get suggestions based on the predicted label
+# Function to get recycling suggestions based on the predicted label
 def get_suggestions(predicted_label):
-    prompt = f"Provide recycling suggestions for the following item: {predicted_label}."
-    suggestions = get_recycling_suggestions(prompt)
-    return suggestions.split('\n')  # Split into a list if needed
+    suggestions = {
+        "Plastic": [
+            "1. Recycle plastic containers by rinsing and placing them in recycling bins.",
+            "2. Consider using reusable bags instead of plastic ones.",
+            "3. Upcycle plastic bottles into planters or storage containers."
+        ],
+        "Metal": [
+            "1. Clean and recycle metal cans in your local recycling program.",
+            "2. Use metal containers for storage instead of plastic.",
+            "3. Donate old metal items instead of throwing them away."
+        ],
+        "Paper": [
+            "1. Recycle paper products like newspapers and cardboard.",
+            "2. Use both sides of paper before discarding.",
+            "3. Shred sensitive documents and recycle the scraps."
+        ],
+        "Glass": [
+            "1. Rinse glass jars and bottles before recycling them.",
+            "2. Consider using glass containers for food storage.",
+            "3. Repurpose glass jars as vases or decorative items."
+        ],
+        "Compost": [
+            "1. Compost kitchen scraps to create nutrient-rich soil.",
+            "2. Use compost bins or piles to reduce waste.",
+            "3. Educate others about the benefits of composting."
+        ],
+        "Cardboard": [
+            "1. Flatten cardboard boxes before recycling.",
+            "2. Reuse cardboard for crafts or storage.",
+            "3. Consider donating cardboard boxes to local schools or charities."
+        ]
+    }
+    return suggestions.get(predicted_label, ["No specific suggestions available."])
+
+# Function to get OpenAI response
+def get_openai_response(prompt):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Specify the model you want to use
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message['content']
+    except Exception as e:
+        st.error(f"Error: {e}")
+        return None
 
 # Show classification page
 def show_classification_page():
@@ -102,11 +136,17 @@ def show_classification_page():
                 predicted_label = classify_image(model, labels, image_data)
                 st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
 
-                # Display recycling suggestions
+                # Get recycling suggestions
                 suggestions = get_suggestions(predicted_label)
                 st.subheader("Recycling Suggestions:")
                 for suggestion in suggestions:
                     st.markdown(f'<div class="suggestion">{suggestion}</div>', unsafe_allow_html=True)
+
+                # Optional: Use OpenAI API to get more insights
+                openai_response = get_openai_response(f"Provide insights on recycling for {predicted_label}.")
+                st.subheader("Additional Insights:")
+                st.write(openai_response)
+
             else:
                 st.error("Model or labels not available. Please check if they were loaded correctly.")
 
@@ -125,11 +165,17 @@ def show_classification_page():
                 predicted_label = classify_image(model, labels, image_data)
                 st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
 
-                # Display recycling suggestions
+                # Get recycling suggestions
                 suggestions = get_suggestions(predicted_label)
                 st.subheader("Recycling Suggestions:")
                 for suggestion in suggestions:
                     st.markdown(f'<div class="suggestion">{suggestion}</div>', unsafe_allow_html=True)
+
+                # Optional: Use OpenAI API to get more insights
+                openai_response = get_openai_response(f"Provide insights on recycling for {predicted_label}.")
+                st.subheader("Additional Insights:")
+                st.write(openai_response)
+
             else:
                 st.error("Model or labels not available. Please check if they were loaded correctly.")
 
