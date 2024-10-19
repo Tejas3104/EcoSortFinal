@@ -1,179 +1,159 @@
 import streamlit as st
-import numpy as np
-import cv2
-from keras.models import load_model
-from PIL import Image
-import io
-import openai
+from home_page import show_home_page
+from classification_page import show_classification_page
+from about_page import show_about_page
+from contact_page import show_contact_page        # Import the new contact page
+from sustainability_page import show_sustainability_page  # Import the new sustainability page
+import streamlit as st
 
-# Set your OpenAI API key here
-openai.api_key = "YOUR_OPENAI_API_KEY"
-
-# Load the model and labels
-@st.cache_resource
-def load_model_func():
-    model = load_model('path/to/your/model.h5')
-    return model
-
-@st.cache_resource
-def load_labels():
-    with open('path/to/your/labels.txt') as f:
-        labels = f.read().splitlines()
-    return labels
-
-# Preprocess the image
-def preprocess_image(image):
-    image = Image.open(image).convert('RGB')
-    image = image.resize((224, 224))  # Adjust size according to your model's input
-    image_data = np.array(image) / 255.0  # Normalize the image
-    image_data = np.expand_dims(image_data, axis=0)  # Add batch dimension
-    return image_data
-
-# Classify the image
-def classify_image(model, labels, image_data):
-    predictions = model.predict(image_data)
-    predicted_label_index = np.argmax(predictions, axis=1)[0]
-    return labels[predicted_label_index]
-
-# Function to get suggestions based on the predicted label
-def get_suggestions(predicted_label):
-    suggestions_dict = {
-        "cardboard": [
-            "Flatten the box before recycling.",
-            "Remove any tape or plastic windows."
-        ],
-        "plastic": [
-            "Rinse out containers before recycling.",
-            "Check for the recycling symbol on the bottom."
-        ],
-        "glass": [
-            "Rinse glass bottles and jars.",
-            "Remove any metal lids or caps."
-        ],
-        "metal": [
-            "Clean food containers before recycling.",
-            "Check for local recycling guidelines."
-        ],
-        "paper": [
-            "Keep paper dry and clean for recycling.",
-            "Shred confidential documents before recycling."
-        ],
-        "trash": [
-            "Dispose of non-recyclable items in the trash.",
-            "Consider composting organic waste."
-        ],
-        "compost": [
-            "Add kitchen scraps and yard waste.",
-            "Avoid adding meat or dairy."
-        ],
+def apply_common_css():
+    st.markdown("""
+    <style>
+    /* Common Styles */
+    .stApp {
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: 'Arial', sans-serif;
     }
-    return suggestions_dict.get(predicted_label, [])
+    
+    body {
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #fff;
+    }
 
-# Function to get additional insights from OpenAI
-def get_openai_response(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
+    /* Home Page Styles */
+    .header-title {
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 50px;
+        animation: fadeIn 1s;
+    }
+
+    .intro {
+        font-size: 22px;
+        text-align: center;
+        margin: 20px auto;
+        max-width: 800px;
+        animation: slideIn 1s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .feature {
+        background-color: #00A86B;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+
+    .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .feature-title {
+        font-weight: bold;
+        color: #ffffc5;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    /* Classification Page Styles */
+    .title {
+        text-align: center;
+        font-size: 2.5em;
+        color: #fff;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.2em;
+        transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+        background-color: #45a049;
+    }
+
+    .suggestion {
+        background-color: #00A86B;
+        border-radius: 8px;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    /* Sustainability Page Styles */
+    .stats-container {
+        text-align: center;
+        margin: 40px 0;
+        animation: bounceIn 1s;
+    }
+
+    @keyframes bounceIn {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Footer */
+    footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+        color: #555;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
+# Main function to navigate through the pages
+def main():
+    apply_common_css()  # Apply common CSS styles
+
+    # Set up the sidebar for navigation
+    st.sidebar.title("EcoSort")
+    
+    # Create radio buttons for navigation with icons
+    page = st.sidebar.radio(
+        "Go to:",
+        ("Home", "Classification", "Sustainability Practices", "About", "Contact Us"),
+        index=0,  # Default selected page
+        label_visibility="collapsed"  # Hide the label for a cleaner look
     )
-    return response['choices'][0]['message']['content']
 
-# Streamlit app layout
-def show_classification_page():
-    st.markdown('<div class="header-title">EcoSort</div>', unsafe_allow_html=True)
-    st.write("Select an option to classify waste:")
+    # Call the corresponding page function based on the selected option
+    if page == "Home":
+        show_home_page()
+    elif page == "Classification":
+        show_classification_page()
+    elif page == "About":
+        show_about_page()
+    elif page == "Contact Us":
+        show_contact_page()    # Show the contact page
+    elif page == "Sustainability Practices":
+        show_sustainability_page()  # Show the sustainability practices page
 
-    # Add radio button for choosing the input method
-    option = st.radio("Choose input method:", ("Upload Image", "Use Webcam"))
-
-    # Load the model and labels when the app starts
-    model, labels = None, None
-
-    try:
-        model = load_model_func()
-        st.success("Model loaded successfully!")
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-
-    try:
-        labels = load_labels()
-        st.success("Labels loaded successfully!")
-    except Exception as e:
-        st.error(f"Error loading labels: {e}")
-
-    # Handle image upload
-    if option == "Upload Image":
-        uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-
-        if uploaded_file is not None:
-            # Display uploaded image
-            st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
-            st.write("")
-
-            # Preprocess the image and make predictions using the model
-            image_data = preprocess_image(uploaded_file)
-            if model and labels:
-                predicted_label = classify_image(model, labels, image_data)
-                st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
-                print(f"Predicted label: {predicted_label}")  # Debug output
-
-                # Get recycling suggestions
-                suggestions = get_suggestions(predicted_label)
-                st.subheader("Recycling Suggestions:")
-                if suggestions:
-                    for suggestion in suggestions:
-                        st.markdown(f'<div class="suggestion">{suggestion}</div>', unsafe_allow_html=True)
-                else:
-                    st.write("No suggestions available.")
-
-                # Optional: Use OpenAI API to get more insights
-                openai_response = get_openai_response(f"Provide insights on recycling for {predicted_label}.")
-                st.subheader("Additional Insights:")
-                if openai_response:
-                    st.write(openai_response)
-                else:
-                    st.write("No insights returned from OpenAI.")
-
-            else:
-                st.error("Model or labels not available. Please check if they were loaded correctly.")
-
-    # Handle webcam capture
-    if option == "Use Webcam":
-        camera_input = st.camera_input("Take a picture")
-        
-        if camera_input is not None:
-            # Display the captured image
-            st.image(camera_input, caption='Captured Image', use_column_width=True)
-            st.write("")
-
-            # Preprocess the image and make predictions using the model
-            image_data = preprocess_image(camera_input)
-            if model and labels:
-                predicted_label = classify_image(model, labels, image_data)
-                st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
-                print(f"Predicted label: {predicted_label}")  # Debug output
-
-                # Get recycling suggestions
-                suggestions = get_suggestions(predicted_label)
-                st.subheader("Recycling Suggestions:")
-                if suggestions:
-                    for suggestion in suggestions:
-                        st.markdown(f'<div class="suggestion">{suggestion}</div>', unsafe_allow_html=True)
-                else:
-                    st.write("No suggestions available.")
-
-                # Optional: Use OpenAI API to get more insights
-                openai_response = get_openai_response(f"Provide insights on recycling for {predicted_label}.")
-                st.subheader("Additional Insights:")
-                if openai_response:
-                    st.write(openai_response)
-                else:
-                    st.write("No insights returned from OpenAI.")
-
-            else:
-                st.error("Model or labels not available. Please check if they were loaded correctly.")
-
-# Run the Streamlit app
 if __name__ == "__main__":
-    show_classification_page()
+    main()
