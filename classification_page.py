@@ -8,7 +8,7 @@ from keras.applications.mobilenet_v2 import preprocess_input  # Adjust according
 import openai
 
 # Set your OpenAI API key
-openai.api_key = 'YOUR_API_KEY'  # Replace with your actual API key
+openai.api_key = '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' 
 
 # Custom DepthwiseConv2D class to handle loading without 'groups' argument
 class CustomDepthwiseConv2D(DepthwiseConv2D):
