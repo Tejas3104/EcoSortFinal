@@ -7,7 +7,6 @@ from keras.models import load_model
 from keras.layers import DepthwiseConv2D
 from keras.preprocessing import image
 from keras.applications.mobilenet_v2 import preprocess_input  # Adjust according to your model
-import openai
 
 # Fetch the service account JSON file from GitHub
 service_account_url = 'https://raw.githubusercontent.com/Tejas3104/SEMV_MINIPROJECT/main/speedy-emissary-439120-f2-eef19d999b14.json'
@@ -18,8 +17,8 @@ if response.status_code == 200:
 else:
     st.error(f"Failed to fetch the JSON file: {response.status_code}")
 
-# Access the OpenAI API key from Streamlit secrets
-openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
+# Load the Gemini API key from Streamlit secrets
+gemini_api_key = st.secrets["general"]["GEMINI_API_KEY"]
 
 # Custom DepthwiseConv2D class to handle loading without 'groups' argument
 class CustomDepthwiseConv2D(DepthwiseConv2D):
@@ -62,24 +61,25 @@ def classify_image(model, labels, image_data):
     predicted_label = labels[np.argmax(predictions)]
     return predicted_label
 
-# Function to get recycling suggestions using OpenAI
-def get_openai_suggestions(predicted_label):
-    try:
-        # Customize the prompt based on the waste type
-        prompt = f"Provide suggestions for handling {predicted_label} waste responsibly."
-
-        # Call OpenAI API to generate suggestions
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=prompt,
-            max_tokens=150,
-            temperature=0.7
-        )
-
-        suggestions = response.choices[0].text.strip()
-        return suggestions
-    except Exception as e:
-        return f"Error getting suggestions from OpenAI: {str(e)}"
+# Function to get recycling suggestions using Gemini API
+def get_gemini_response(prompt):
+    url = "https://gemini.googleapis.com/v1/generateContent"  # Replace with the actual Gemini API endpoint
+    headers = {
+        "Authorization": f"Bearer {gemini_api_key}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "prompt": prompt,
+        "max_tokens": 150,
+        "temperature": 0.7
+    }
+    response = requests.post(url, headers=headers, json=data)
+    
+    if response.status_code == 200:
+        return response.json()
+    else:
+        st.error(f"Error getting response from Gemini: {response.status_code}")
+        return None
 
 # Show classification page
 def show_classification_page():
@@ -118,10 +118,14 @@ def show_classification_page():
                 predicted_label = classify_image(model, labels, image_data)
                 st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
 
-                # Get recycling suggestions from OpenAI
-                suggestions = get_openai_suggestions(predicted_label)
-                st.subheader("Recycling Suggestions:")
-                st.markdown(f'<div class="suggestion">{suggestions}</div>', unsafe_allow_html=True)
+                # Get recycling suggestions from Gemini API
+                prompt = f"Provide suggestions for handling {predicted_label} waste responsibly."
+                gemini_response = get_gemini_response(prompt)
+
+                if gemini_response:
+                    suggestions = gemini_response.get("response")  # Adjust based on the actual response structure
+                    st.subheader("Recycling Suggestions:")
+                    st.markdown(f'<div class="suggestion">{suggestions}</div>', unsafe_allow_html=True)
             else:
                 st.error("Model or labels not available. Please check if they were loaded correctly.")
 
@@ -140,10 +144,14 @@ def show_classification_page():
                 predicted_label = classify_image(model, labels, image_data)
                 st.write(f"Predicted label: **{predicted_label}**", unsafe_allow_html=True)
 
-                # Get recycling suggestions from OpenAI
-                suggestions = get_openai_suggestions(predicted_label)
-                st.subheader("Recycling Suggestions:")
-                st.markdown(f'<div class="suggestion">{suggestions}</div>', unsafe_allow_html=True)
+                # Get recycling suggestions from Gemini API
+                prompt = f"Provide suggestions for handling {predicted_label} waste responsibly."
+                gemini_response = get_gemini_response(prompt)
+
+                if gemini_response:
+                    suggestions = gemini_response.get("response")  # Adjust based on the actual response structure
+                    st.subheader("Recycling Suggestions:")
+                    st.markdown(f'<div class="suggestion">{suggestions}</div>', unsafe_allow_html=True)
             else:
                 st.error("Model or labels not available. Please check if they were loaded correctly.")
 
