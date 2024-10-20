@@ -7,4 +7,4 @@ python-dotenv
 openai==0.28
 requests
 keras
-gemini-sdk
+
