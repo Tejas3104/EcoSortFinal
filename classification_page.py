@@ -1,11 +1,22 @@
 import streamlit as st
 import os
 import numpy as np
+import requests
+import json
 from keras.models import load_model
 from keras.layers import DepthwiseConv2D
 from keras.preprocessing import image
 from keras.applications.mobilenet_v2 import preprocess_input  # Adjust according to your model
 import openai
+
+# Fetch the service account JSON file from GitHub
+service_account_url = 'https://raw.githubusercontent.com/Tejas3104/SEMV_MINIPROJECT/main/speedy-emissary-439120-f2-eef19d999b14.json'
+
+response = requests.get(service_account_url)
+if response.status_code == 200:
+    service_account_info = json.loads(response.text)
+else:
+    st.error(f"Failed to fetch the JSON file: {response.status_code}")
 
 # Access the OpenAI API key from Streamlit secrets
 openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
