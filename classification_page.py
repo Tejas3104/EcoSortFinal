@@ -8,8 +8,8 @@ from keras.layers import DepthwiseConv2D
 from keras.preprocessing import image
 from keras.applications.mobilenet_v2 import preprocess_input  # Adjust according to your model
 
-# Fetch the service account JSON file from GitHub
-service_account_url = 'https://raw.githubusercontent.com/Tejas3104/SEMV_MINIPROJECT/main/speedy-emissary-439120-f2-eef19d999b14.json'
+# Fetch the service account JSON file from GitHub (Updated URL)
+service_account_url = 'https://raw.githubusercontent.com/Tejas3104/SEMV_MINIPROJECT/main/speedy-emissary-439120-f2-1b967f6dff0e.json'
 
 response = requests.get(service_account_url)
 if response.status_code == 200:
