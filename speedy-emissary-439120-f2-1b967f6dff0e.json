@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "speedy-emissary-439120-f2",
+  "private_key_id": "1b967f6dff0e416d991786bfc5028d0621ac3ff3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDP0h7fInAIuUJ0\nUfaqq8FVnagONJCO3lBiVtoH57m+tD6YKIMEv/rOAFnu1z+EcwYicvY1FnlXG2ZD\nomFHyavX4hA1JhlyGLW8veJlbHyqA9jBV52B2fjZ/O3OFLwrkfEoa3t0pfWpgesy\njhRBR01R+nRK3+9eMI3GfCmpzS/j+vlqPBlzAAuqb6go1+nPeKRvJ7J298JrZCrn\nVOAJ88NOoqoLKB+2Ok4zQMGUQfpqwc1QoFHlsqzehgiGYsV8QZdWcuP2BxswmXZF\n8VLB/FmIVx1ZP6cwwfnNZDsUT0Z3HZxisNkesA02NOv5AIuQBuqj6WDMk9FPje7j\nCps3vbfrAgMBAAECggEABW7/eqMKXdgGKkdoVR8Hf4cPOUvbibi7Tk7qBXHkE93f\nkxfgERQ56P/uWgXLtdlSDD2IPWwYgRQI0PTiaT+XHB5fgRw9ZxPJUKWAUVmMSt+t\n36Q8TIRX8s8fopc9MkBvFzj0MeES8rsgXKKFWg2UsnODbd+8APDxDAL8DeH9Ag9m\nO5YzUCkZ1VgjRnNooU65dPkPbRLewQPS8Za/7noQDoDuwQbddmDIAGPcYdOiLTzW\nKfhJCPsq4CLRUfMSc9yHP4THFxICGBBBQ87HW4x7zpr+LnIjj74a/2d1BJYdS/4H\ny/ZL/raA//U9FgUyWCsrt5xitJhEI3/cj1nygK2oJQKBgQDud9dpWmcUFJVV22ZB\nBPZna621FDzROSCJb+7mgHUkeY4enWDFCae+XFzJ/38F9DYFpPtQaOghHDiRS16s\nURnwOKNXxegUxzFSYSTckeGzhkVlrFeqlo0u35MBVXavavY88A/jF3HdwCdYesqA\n9xTmIR7alWRuj1VOUKhCsYaEtQKBgQDfGXjMITNzEvssCtul2GzCeYBaveVSxdyM\ntmrAp+YTgVeWanleOTKp9YnWT6kuv8A8FVqaXEQbEI9u5hjhOj9RDdIlWPfIUxgD\nBBeC6a9TJsb5RZ8m+blGtPoGHuRCxNcZ0+AW+E2KwFhFPhNTYFHgPSeN6aZZcsGe\nrCenF0LOHwKBgCg5wPV9kWu6uSIde1c2bhYt/MRR4JxuZYWpgwQQ4THA629QntU9\n9rTOwbw1RAkOE9rJ5LbAq3+CUix4KUUp/RUfiLYypR50J2a9CknGterhmG05MCSP\ndstUXWjZMMcQZO8Mk7F77/I3CqwLMoOkqjrTlW/LyYA432vxgSCW75kNAoGBALEy\nlQxlDm1G1TJ9CUpnZLLuODFahItC1lL5DD8q3AYABGZW+UEKYyA1Ap6ytOiJqpDO\nUSErSXjJpXLq1TYGwoWJWbEKQfvda8Pxew8itntv4DfawXb+f9cWJUO5Q4l4uHQu\nId18qHIdJb8Rd94QMdfOGt2Ph+2hxQFXMUN4qTn3AoGAQd8pI5Xct8eS4qXQJAXC\nDMHW0Fiusc73YPOoQCul0sAE8iaXYlw7MmET55YDgAqTZFZYdcK27Xu85tV3+4HK\nRvqXXaDilZ8Q1RbwN8lTKFDgAGKUtcOXEMw7Cojqaj/wwrp6OQdt3tiaSWU6R8jD\nj06pNPudYj0EpcVknBZpBfY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "waste-classification-286@speedy-emissary-439120-f2.iam.gserviceaccount.com",
+  "client_id": "107420600943285699963",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/waste-classification-286%40speedy-emissary-439120-f2.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
