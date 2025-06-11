@@ -1,49 +1,109 @@
-# SemV
-Mini Project
-
-EcoSort : The Waste Classification Model
-
+🌟 EcoSort: The Waste Classification Model
 ♻️ EcoSort
-EcoSort is an AI-powered waste classification web application that helps users identify and properly dispose of waste by classifying it into six key categories using deep learning. The project aims to promote environmental awareness and responsible recycling habits.
+EcoSort is an AI-powered waste classification web application that helps users identify and properly dispose of waste by classifying it into six key categories using deep learning.
 
+Our mission is to promote environmental awareness and encourage responsible recycling habits through technology.
 
 🌱 Project Objective
-To build an intelligent system that:
+EcoSort is designed to:
 
-1) Automatically classifies waste from images into six categories.
-2) Provides real-time suggestions for proper disposal.
-3) Raises public awareness on sustainable waste management.
+✅ Automatically classify waste from images into six categories.
+
+✅ Provide real-time suggestions for proper disposal.
+
+✅ Raise public awareness on sustainable waste management.
 
 🧠 Tech Stack
 Frontend: Streamlit
+
 Backend: Python
-Machine Learning: TensorFlow, Keras (VGG16)
+
+Machine Learning: TensorFlow, Keras (VGG16 Model)
+
 Libraries Used: OpenCV, NumPy, Matplotlib
+
 Environment: Google Colab, Jupyter Notebook
 
-
 🗂️ Waste Categories
-EcoSort identifies the following six types of waste:
+EcoSort classifies waste into the following six categories:
 
-1) Cardboard
-2) Compost
-3) Glass
-4)Metal
-5)Paper
-6)Plastic
+🟫 Cardboard
 
+🌿 Compost
+
+🧪 Glass
+
+🛢️ Metal
+
+📄 Paper
+
+🧴 Plastic
 
 ⚙️ Model Overview
-Model Used: VGG16 (pre-trained on ImageNet, fine-tuned for waste classification)
+Model Used: VGG16 (Pre-trained on ImageNet and fine-tuned for 6 waste classes)
 
 Optimizer: Adam
-Loss Function: Categorical Crossentropy
-Accuracy: ~71% on test data
-Data Augmentation: Rotation, Zoom, Flipping to improve generalization
 
+Loss Function: Categorical Crossentropy
+
+Test Accuracy: ~71%
+
+Data Augmentation: Rotation, Zoom, Horizontal Flip
 
 🚀 Features
-📸 Upload real-time waste images for classification
-📊 Instant prediction with category and confidence score
-🧾 Smart suggestions for disposal and recycling
-🌍 Informative section to educate users on each category
+📸 Upload waste images for instant classification
+
+📊 Real-time predictions with confidence scores
+
+🧾 Smart suggestions for eco-friendly disposal
+
+🌍 Informative insights about each waste category
+
+🛠️ How to Run
+Clone the Repository
+
+bash
+Copy
+Edit
+git clone https://github.com/yourusername/ecosort.git
+cd ecosort
+Install Required Libraries
+
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Start the App
+
+bash
+Copy
+Edit
+streamlit run app.py
+
+
+👥 Team Members
+👨‍💻 Tejas Mahakalkar – Roll No. 76
+
+👩‍💻 Kashish Pawar – Roll No. 03
+
+👩‍💻 Vidhi Dhakate – Roll No. 16
+
+🔮 Future Scope
+🔁 Improve accuracy using models like ResNet or EfficientNet
+
+📱 Build a mobile-friendly version of the app
+
+🌐 Integrate multilingual and voice support
+
+🗺️ Add map-based disposal location suggestions
+
+
+
+🙌 Acknowledgements
+TensorFlow & Keras for model development
+
+OpenCV for image preprocessing
+
+Streamlit for frontend UI
+
+Google Colab for GPU training
